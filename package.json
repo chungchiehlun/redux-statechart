@@ -1,8 +1,11 @@
 {
   "name": "reduxstate",
-  "version": "0.1.0",
-  "main": "src/index.js",
+  "version": "0.0.0",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.umd.js",
   "scripts": {
+    "build": "rollup -c",
     "test": "jest"
   },
   "husky": {
@@ -17,9 +20,7 @@
     ]
   },
   "license": "MIT",
-  "dependencies": {
-    "shortid": "^2.2.13"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
@@ -29,6 +30,8 @@
     "jest": "^23.6.0",
     "lint-staged": "^7.3.0",
     "prettier": "1.14.3",
+    "rollup": "^0.66.2",
+    "rollup-plugin-babel": "^4.0.3",
     "xstate": "^3.3.3"
   }
 }

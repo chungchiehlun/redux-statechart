@@ -1,7 +1,16 @@
-import shortid from "shortid";
+const makeid = () => {
+  var text = "";
+  var possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+};
 
 export default machine => {
-  const machineId = machine.id ? machine.id : shortid.generate();
+  const machineId = machine.id ? machine.id : makeid();
   // MST is the abbreviation of Machine State Transition.
   const machineActionType = `@MST/${machineId}`;
   return {
