@@ -1,5 +1,5 @@
 import { Machine } from "xstate";
-import reduxstate from "../";
+import RS from "../";
 
 const starWarsMachine = Machine({
   key: "starWars",
@@ -37,7 +37,7 @@ const extReducer = (state = 0, action) => {
   }
 };
 
-const { machineActionCreator, reducerEnhancer } = reduxstate(starWarsMachine);
+const { machineActionCreator, reducerEnhancer } = RS(starWarsMachine);
 
 test("enhanced reducer return the initial state", () => {
   const reducer = reducerEnhancer(extReducer);

@@ -15,7 +15,7 @@ export default [
     output: {
       file: pkg.browser,
       format: "umd",
-      name: "Reduxstate"
+      name: "Redux-statechart"
     },
     plugins: [babel(babelOptions)]
   },
