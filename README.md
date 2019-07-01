@@ -8,23 +8,22 @@ redux + xstate = awesome !
 
 Deterministic state not only reduce time fixing unpredictable and exploded state but also provide a common language for designers & developers. On the other hand, uncertain or extended state are regular when handling side effect in the real world app. Generally speaking, both infinite and finite states are necessary.
 
-Redux do not strictly limit state shape but xstate have to define a [machine configuration](http://davidkpiano.github.io/xstate/docs/#/api/config?id=machine-configuration). **Redux-statechart is a tiny library make redux state possessed with both finite and infinite states in the underlying redux pattern.**
+Redux do not strictly limit state shape but xstate have to define a [machine configuration](https://xstate.js.org/docs/guides/machines.html#configuration). **Redux-statechart is a tiny library make redux state possessed with both finite and infinite states in the underlying redux pattern.**
 
 ## Usage Example
 
-First, create a [statechart machine](http://davidkpiano.github.io/xstate/docs/#/api/machine?id=machine). Please note that `xstate` must be _version 3.x_. The following example came from its official [complete guide](https://github.com/davidkpiano/xstate/blob/master/docs/guides/complete.md).
+First, create a [statechart machine](https://xstate.js.org/docs/guides/machines.html). Please note that `xstate` must be _version 4.x_.
 
 ```js
 const starWarsMachine = Machine({
-  key: "starWars",
+  id: "starWars",
   initial: "idle",
   states: {
     idle: {
       on: {
         REQUEST: {
-          pending: {
-            actions: ["alertStartingFirstRequest"]
-          }
+          target: "pending",
+          actions: ["alertStartingFirstRequest"]
         }
       },
       onExit: "alertMayTheForceBeWithYou"
@@ -41,14 +40,15 @@ const starWarsMachine = Machine({
 });
 ```
 
-**Redux-statechart** take [statechart machine](http://davidkpiano.github.io/xstate/docs/#/api/machine?id=machine) as the argument and return a _higher order reducer (HOR)_ and an _action creator_. HOR takes a common reducer as the first argument and an optional initial state as the second.
+**Redux-statechart** take array of [statechart machine](http://davidkpiano.github.io/xstate/docs/#/api/machine?id=machine)s as the only argument and return a _higher order reducer (HOR)_ and an _action creator_. HOR takes a regular reducer as the first argument and an optional initial state as the second.
 
 The principle of reducer do not restrict the state. Hence, a reducer is hard to distinguish between finite and infinite state. However, the HOR could design the state shape within the **separate namespace of finite and infinite state**. Run `store.getState()` and inspect the whole state. Its shape is like `{ infinite: ..., finite: ... }`.
 
 ```javascript
 import RS from "redux-statechart";
 
-const { machineActionCreator, reducerEnhancer } = RS(starWarsMachine);
+// reducerEnhancer is a Higher Order Reducer.
+const { machineActionCreator, reducerEnhancer } = RS([starWarsMachine]);
 
 const enhancedReducer = reducerEnhancer((state = 0, action) => {
   switch (action.type) {
@@ -64,14 +64,14 @@ const enhancedReducer = reducerEnhancer((state = 0, action) => {
 const store = createStore(enhancedReducer);
 ```
 
-Finally, whether finite or infinite state, call dispatch to update the state. For convenience, `Redux-statechart` contains another returned value, `machineActionCreator`. It takes event of state machine as required argument and return an action you could emit it.
+Finally, whether finite or infinite state, call dispatch to update the state. For convenience, `Redux-statechart` contains another returned value, `machineActionCreator`. It takes **machine id** and **event** as required arguments and return an action you could dispatch it.
 
 ```js
 store.dispatch(machineActionCreator("REQUEST"));
-// => State{ infinite: { starWars: { value: "pending", ... }, finite: 0}
+// => State{ infinite: 0, finite: { starWars: { value: "pending", ... }}
 
 store.dispatch({ type: "INCREMENT" });
-// => State{ infinite: { ... }, finite: 1}
+// => State{ infinite: 1, finite: { starWars: { value: "pending", ... }}
 ```
 
 ## Issues
