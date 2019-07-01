@@ -1,43 +1,46 @@
-const makeid = () => {
-  var text = "";
-  var possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+export const confirmMachineIDs = machines => {};
 
-  for (var i = 0; i < 5; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
+export const createFiniteState = machines => {
+  return machines.reduce((result, machine) => {
+    result[machine.id] = machine.initial;
+    return result;
+  }, {});
 };
 
-export default machine => {
-  const machineId = machine.id ? machine.id : makeid();
-  // MST is the abbreviation of Machine State Transition.
-  const machineActionType = `@MST/${machineId}`;
+export default machines => {
+  const machineMap = machines.reduce((result, machine) => {
+    result[machine.id] = machine;
+    return result;
+  }, {});
+
   return {
-    machineActionCreator: machineEvent => {
+    machineActionCreator: (machineID, machineEvent) => {
+      // MST is the abbreviation of Machine State Transition.
       return {
-        type: machineActionType,
-        machineEvent
+        type: `@MST`,
+        payload: {
+          machineID,
+          machineEvent
+        }
       };
     },
     reducerEnhancer: (extReducer, extInitialState) => {
       const initialState = {
         infinite: extInitialState,
-        finite: {
-          [machineId]: machine.initialState.value
-        }
+        finite: createFiniteState(machines)
       };
 
       return (state = initialState, action) => {
         switch (action.type) {
-          case machineActionType:
+          case `@MST`:
+            const { machineID, machineEvent } = action.payload;
             return {
               ...state,
               finite: {
-                [machineId]: machine.transition(
-                  state["finite"][machineId],
-                  action.machineEvent,
-                  state
+                ...state.finite,
+                [machineID]: machineMap[machineID].transition(
+                  state["finite"][machineID],
+                  machineEvent
                 )
               }
             };
