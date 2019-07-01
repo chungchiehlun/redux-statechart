@@ -32,6 +32,9 @@
     "prettier": "1.14.3",
     "rollup": "^0.66.2",
     "rollup-plugin-babel": "^4.0.3",
-    "xstate": "^3.3.3"
+    "xstate": "^4.6.3"
+  },
+  "peerDependencies": {
+    "xstate": "^4.6.3"
   }
 }
