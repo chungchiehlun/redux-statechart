@@ -1,11 +1,11 @@
 {
   "name": "redux-statechart",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "browser": "dist/index.umd.js",
   "scripts": {
-    "build": "rollup -c",
+    "prepublish": "rollup -c",
     "test": "jest"
   },
   "husky": {
@@ -19,6 +19,9 @@
       "git add"
     ]
   },
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
