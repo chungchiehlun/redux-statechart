@@ -1,8 +1,10 @@
+import { isPlainObject } from "lodash";
+
 export const confirmMachineIDs = machines => {};
 
 export const createFiniteState = machines => {
   return machines.reduce((result, machine) => {
-    result[machine.id] = machine.initial;
+    result[`${machine.id}Mach`] = machine.initial;
     return result;
   }, {});
 };
@@ -24,10 +26,14 @@ export default machines => {
         }
       };
     },
-    reducerEnhancer: (extReducer, extInitialState) => {
+    reducerEnhancer: (extReducer, extInitialState = {}) => {
+      if (!isPlainObject(extInitialState)) {
+        throw "initial state must be object."
+      }
+
       const initialState = {
-        infinite: extInitialState,
-        finite: createFiniteState(machines)
+        ...extInitialState,
+        ...createFiniteState(machines)
       };
 
       return (state = initialState, action) => {
@@ -36,18 +42,15 @@ export default machines => {
             const { machineID, machineEvent } = action.payload;
             return {
               ...state,
-              finite: {
-                ...state.finite,
-                [machineID]: machineMap[machineID].transition(
-                  state["finite"][machineID],
-                  machineEvent
-                )
-              }
+              [`${machineID}Mach`]: machineMap[machineID].transition(
+                state[`${machineID}Mach`],
+                machineEvent
+              )
             };
           default:
             return {
               ...state,
-              infinite: extReducer(state.infinite, action)
+              ...extReducer(state, action)
             };
         }
       };

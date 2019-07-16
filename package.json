@@ -5,8 +5,31 @@
   "module": "dist/index.esm.js",
   "browser": "dist/index.umd.js",
   "scripts": {
-    "prepublish": "rollup -c",
+    "publish": "rollup -c && npm publish",
     "test": "jest"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "husky": ">=1",
+    "jest": "^24.8.0",
+    "lint-staged": ">=8",
+    "prettier": "^1.18.2",
+    "rollup": "^0.66.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "xstate": "^4.6.3"
+  },
+  "peerDependencies": {
+    "xstate": "^4.6.3"
   },
   "husky": {
     "hooks": {
@@ -14,30 +37,9 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
+    "*.{js,css,json,md}": [
       "prettier --write",
       "git add"
     ]
-  },
-  "files": [
-    "dist"
-  ],
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
-    "husky": "^1.0.0-rc.15",
-    "jest": "^23.6.0",
-    "lint-staged": "^7.3.0",
-    "prettier": "1.14.3",
-    "rollup": "^0.66.2",
-    "rollup-plugin-babel": "^4.0.3",
-    "xstate": "^4.6.3"
-  },
-  "peerDependencies": {
-    "xstate": "^4.6.3"
   }
 }

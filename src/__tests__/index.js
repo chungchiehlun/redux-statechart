@@ -44,20 +44,20 @@ const starWarsMachine = Machine({
   }
 });
 
-const extReducer = (state = 0, action) => {
+const extReducer = (state, action) => {
   switch (action.type) {
     case "INCREMENT":
-      return state + 1;
+      return { ...state, counter: state.counter + 1 };
     case "DECREMENT":
-      return state - 1;
+      return { ...state, counter: state.counter - 1 };
     default:
       return state;
   }
 };
 
-test("The identifiers of machine arguments could not be duplicate and undefined", () => {});
+test("The identifiers of machine arguments could not be duplicate and undefined.", () => {});
 
-test("create an action from machineActionCreator", () => {
+test("Create an action from machineActionCreator.", () => {
   const { machineActionCreator } = RS([starWarsMachine]);
   const machineActionType = `@MST`;
   expect(machineActionCreator("starWars", "REQUEST")).toEqual({
@@ -71,34 +71,34 @@ test("create an action from machineActionCreator", () => {
 
 test("Create finite state from instances of machines", () => {
   expect(createFiniteState([promiseMachine, starWarsMachine])).toEqual({
-    promise: "pending",
-    starWars: "idle"
+    promiseMach: "pending",
+    starWarsMach: "idle"
   });
 });
 
 test("enhanced reducer return the initial state", () => {
   const { machineActionCreator, reducerEnhancer } = RS([starWarsMachine]);
-  const reducer = reducerEnhancer(extReducer);
+  const reducer = reducerEnhancer(extReducer, { counter: 0 });
   expect(reducer(undefined, {})).toEqual({
-    finite: { starWars: "idle" },
-    infinite: 0
+    starWarsMach: "idle",
+    counter: 0
   });
 });
 
 test("enhanced reducer update infinite state", () => {
   const { machineActionCreator, reducerEnhancer } = RS([starWarsMachine]);
-  const reducer = reducerEnhancer(extReducer);
+  const reducer = reducerEnhancer(extReducer, { counter: 0 });
   const currentState = {
-    finite: { starWars: "idle" },
-    infinite: 0
+    starWarsMach: "idle",
+    counter: 0
   };
   expect(
     reducer(currentState, {
       type: "INCREMENT"
     })
   ).toEqual({
-    finite: { starWars: "idle" },
-    infinite: 1
+    starWarsMach: "idle",
+    counter: 1
   });
 });
 
@@ -107,17 +107,23 @@ test("enhanced reducer update finite state", () => {
     starWarsMachine,
     promiseMachine
   ]);
-  const reducer = reducerEnhancer(extReducer, 0);
+  const reducer = reducerEnhancer(extReducer, { counter: 0 });
 
-  const { finite, infinite } = reducer(
+  const { counter, starWarsMach, promiseMach } = reducer(
     undefined,
     machineActionCreator("starWars", "REQUEST")
   );
 
-  expect(infinite).toEqual(0);
-  expect(finite["starWars"].value).toBe("pending");
-  expect(finite["promise"]).toBe("pending");
-  expect(finite["starWars"].actions).toContainEqual({
+  expect(counter).toEqual(0);
+  expect(starWarsMach.value).toBe("pending");
+  expect(promiseMach).toBe("pending");
+  expect(starWarsMach.actions).toContainEqual({
     type: "alertStartingFirstRequest"
   });
+
+  expect(
+    reducer(undefined, {
+      type: "INCREMENT"
+    })
+  ).toHaveProperty("counter", 1)
 });
