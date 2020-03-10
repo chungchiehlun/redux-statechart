@@ -1,8 +1,6 @@
 import { isPlainObject } from "lodash";
 
-export const confirmMachineIDs = machines => {};
-
-export const createFiniteState = machines => {
+const createFiniteState = machines => {
   return machines.reduce((result, machine) => {
     result[`${machine.id}Mach`] = machine.initial;
     return result;
@@ -28,7 +26,7 @@ export default machines => {
     },
     reducerEnhancer: (extReducer, extInitialState = {}) => {
       if (!isPlainObject(extInitialState)) {
-        throw "initial state must be object."
+        throw "initial state must be object.";
       }
 
       const initialState = {

@@ -40,8 +40,7 @@ const starWarsMachine = Machine({
 });
 ```
 
-**Redux-statechart** take array of [statechart machines](http://davidkpiano.github.io/xstate/docs/#/api/machine?id=machine)s as the only argument and return a _higher order reducer (HOR)_ and an _action creator_. HOR takes a regular reducer as the first argument and an optional initial state as the second. *Note the initial state must be object.*
-
+**Redux-statechart** take array of [statechart machines](http://davidkpiano.github.io/xstate/docs/#/api/machine?id=machine)s as the only argument and return a _higher order reducer (HOR)_ and an _action creator_. HOR takes a regular reducer as the first argument and an optional initial state as the second. _Note the initial state must be object._
 
 ```javascript
 import RS from "redux-statechart";
@@ -64,11 +63,11 @@ const enhancedReducer = reducerEnhancer(extReducer, { counter: 0 });
 const store = createStore(enhancedReducer);
 ```
 
-> The principle of reducer do not restrict the shape of state. A reducer is hard to distinguish between finite and infinite state. 
+> The principle of reducer do not restrict the shape of state. A reducer is hard to distinguish between finite and infinite state.
 
-In the convention of **redux-statechart**, the *finite* state are appended with `-Mach`.
+In the convention of **redux-statechart**, the _finite_ state are appended with `Mach`.
 
-Finally, whether finite or infinite state, call dispatch to update the state. For convenience, `redux-statechart` contains another returned value, `machineActionCreator`. It takes **machine id** and **event** as required arguments and return an action you could dispatch it.
+Finally, whether finite or infinite state, call dispatch to update the state. For convenience, `redux-statechart` contains another returned value, `machineActionCreator`. It takes **machine id** and **machine event** as required arguments and return an action you could dispatch it.
 
 ```js
 store.dispatch(machineActionCreator("starWars", "REQUEST"));
@@ -77,7 +76,6 @@ store.dispatch(machineActionCreator("starWars", "REQUEST"));
 store.dispatch({ type: "INCREMENT" });
 // => State{ counter: 1, starWarsMach: { value: "pending", ... }}
 ```
-
 
 ## Issues
 
