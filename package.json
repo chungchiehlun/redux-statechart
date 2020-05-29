@@ -1,13 +1,9 @@
 {
   "name": "redux-statechart",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "browser": "dist/index.umd.js",
-  "scripts": {
-    "publish": "rollup -c && npm publish",
-    "test": "jest"
-  },
   "files": [
     "dist"
   ],
