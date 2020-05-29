@@ -1,13 +1,13 @@
 import { isPlainObject } from "lodash";
 
-const createFiniteState = machines => {
+export const createFiniteState = (machines) => {
   return machines.reduce((result, machine) => {
     result[`${machine.id}Mach`] = machine.initial;
     return result;
   }, {});
 };
 
-export default machines => {
+export default (machines) => {
   const machineMap = machines.reduce((result, machine) => {
     result[machine.id] = machine;
     return result;
@@ -20,8 +20,8 @@ export default machines => {
         type: `@MST`,
         payload: {
           machineID,
-          machineEvent
-        }
+          machineEvent,
+        },
       };
     },
     reducerEnhancer: (extReducer, extInitialState = {}) => {
@@ -31,7 +31,7 @@ export default machines => {
 
       const initialState = {
         ...extInitialState,
-        ...createFiniteState(machines)
+        ...createFiniteState(machines),
       };
 
       return (state = initialState, action) => {
@@ -43,15 +43,15 @@ export default machines => {
               [`${machineID}Mach`]: machineMap[machineID].transition(
                 state[`${machineID}Mach`],
                 machineEvent
-              )
+              ),
             };
           default:
             return {
               ...state,
-              ...extReducer(state, action)
+              ...extReducer(state, action),
             };
         }
       };
-    }
+    },
   };
 };

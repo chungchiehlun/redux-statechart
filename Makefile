@@ -10,7 +10,7 @@ test:
 build: test
 	./node_modules/.bin/rollup -c
 
-publish:
+publish: build
 	npx standard-version
 	npm publish
 
