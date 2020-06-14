@@ -1,11 +1,8 @@
-import { isPlainObject } from "lodash";
+import isPlainObject from "lodash/isPlainObject";
+import createFiniteState from "./createFiniteState";
+import { machineActionType } from "./constants";
 
-export const createFiniteState = (machines) => {
-  return machines.reduce((result, machine) => {
-    result[`${machine.id}Mach`] = machine.initial;
-    return result;
-  }, {});
-};
+export * from "@xstate/fsm";
 
 export default (machines) => {
   const machineMap = machines.reduce((result, machine) => {

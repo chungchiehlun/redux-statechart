@@ -5,10 +5,10 @@ install:
 	yarn
 
 test:
-	./node_modules/.bin/jest
+	yarn run test
 
 build: test
-	./node_modules/.bin/rollup -c
+	yarn run build
 
 publish: build
 	npx standard-version
